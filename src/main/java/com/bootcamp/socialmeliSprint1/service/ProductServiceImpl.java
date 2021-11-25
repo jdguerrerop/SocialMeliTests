@@ -150,7 +150,23 @@ public class ProductServiceImpl implements IProductService{
 
         post.stream().forEach(postTemp -> {
             if(postTemp.isHasPromo()){
-                posts.add(mm.map(postTemp,PostPromoOutDTO.class));
+                //posts.add(mm.map(postTemp,PostPromoOutDTO.class));
+
+                DateTimeFormatter dt = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
+                LocalDate date = postTemp.getDate();
+
+                var tempDate = date.format(dt);
+
+                ProductDTO detail = new ProductDTO(postTemp.getDetail().getProductId(),
+                        postTemp.getDetail().getProductName(),
+                        postTemp.getDetail().getType(), postTemp.getDetail().getBrand(),
+                        postTemp.getDetail().getColor(),postTemp.getDetail().getNotes());
+
+                posts.add(new PostPromoOutDTO(postTemp.getPostId(),tempDate,
+                        detail,postTemp.getCategory(), postTemp.getPrice(),
+                        postTemp.isHasPromo(), postTemp.getDiscount()));
+
             }
         });
 
